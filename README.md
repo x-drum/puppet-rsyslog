@@ -10,6 +10,9 @@ A class for managing rsyslog server options.
 [*package_ensure*]  
   Ensure package installation [present, absent, purged, held, latest], default: present.
 
+[*default_config*]  
+  Install a stanza with default configuration [true, false], default: false.
+
 ### Sample Usage:
 
 ```
@@ -19,6 +22,7 @@ include 'rsyslog'
  ```puppet
  class { 'rsyslog':
    package_ensure => absent,
+   default_config => true,
  }
  ```
 ## Resource: rsyslog::snippet
