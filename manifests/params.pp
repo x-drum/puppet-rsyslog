@@ -11,13 +11,19 @@
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
 class rsyslog::params {
-	$pkg_ensure = 'present'
+	$config_file = '/etc/rsyslog.conf'
+	$config_dir = '/etc/rsyslog.d'
+	$package_name = 'rsyslog'
 
 	case $::osfamily {
+		openbsd: {
+			$default_owner = root
+			$default_group = wheel
+			$service_name = 'rsyslogd'
+		}
 		default: {
-			$config_file = '/etc/rsyslog.conf'
-			$config_dir = '/etc/rsyslog.d'
-			$package_name = 'rsyslog'
+			$default_owner = root
+			$default_group = root
 			$service_name = 'rsyslog'
 		}
 	}

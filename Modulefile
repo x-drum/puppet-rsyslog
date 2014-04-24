@@ -1,5 +1,5 @@
 name 'xdrum-rsyslog'
-version '0.0.1'
+version '0.0.2'
 source 'git://github.com/x-drum/puppet-rsyslog'
 author 'Alessio Cassibba (X-Drum)'
 license 'Apache Version 2.0'

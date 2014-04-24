@@ -31,16 +31,17 @@ define rsyslog::snippet (
   include rsyslog
 
   if ! is_array($lines) {
-    fail("The argument lines must be an array.")
+    fail("The parameter lines must be an array.")
   }
 
   file { "$rsyslog::params::config_dir/${name}.conf":
     ensure => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0444',
-    content => inline_template("# HEADER: Warning: This file is managed by puppet,\n# HEADER: *do not* edit manually.\n\n <%= lines.collect{|x| x.to_s+'\n'} %>"),
-    notify => Service['rsyslog'],
+    owner => $rsyslog::params::default_owner,
+    group => $rsyslog::params::default_group,
+    mode => '0444',
+    content => template("rsyslog/snippet.conf.erb"),
+    notify => Service[$rsyslog::params::service_name],
+    require => File[$rsyslog::params::config_dir],
   }
 }
 
