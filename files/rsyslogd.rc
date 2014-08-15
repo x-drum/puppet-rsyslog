@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# $OpenBSD$
+
+daemon="/usr/local/sbin/rsyslogd"
+daemon_flags="-i /var/run/rsyslogd.pid -f /etc/rsyslog.conf"
+
+. /etc/rc.d/rc.subr
+
+rc_cmd $1
+
