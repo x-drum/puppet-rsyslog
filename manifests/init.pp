@@ -34,42 +34,42 @@ class rsyslog (
   }
 
   service { $rsyslog::params::service_name:
-    ensure => 'running',
-    enable => true,
-    hasstatus => true,
+    ensure     => 'running',
+    enable     => true,
+    hasstatus  => true,
     hasrestart => true,
-    subscribe => [Package[$rsyslog::params::package_name], File[$rsyslog::params::config_file]],
-    require => File[$rsyslog::params::config_file],
+    subscribe  => File[$rsyslog::params::config_file],
+    require    => [Package[$rsyslog::params::package_name], File[$rsyslog::params::config_file]],
   }
 
   if $::osfamily == 'openbsd' and ! defined(File["/etc/rc.d/${rsyslog::params::service_name}"]) {
     file { "/etc/rc.d/${rsyslog::params::service_name}":
-      ensure => present,
-      owner => $rsyslog::params::default_owner,
-      group => $rsyslog::params::default_group,
-      mode => '0744',
-      source => 'puppet:///modules/rsyslog/rsyslogd.rc',
+      ensure  => present,
+      owner   => $rsyslog::params::default_owner,
+      group   => $rsyslog::params::default_group,
+      mode    => '0744',
+      source  => 'puppet:///modules/rsyslog/rsyslogd.rc',
       require => Package[$rsyslog::params::package_name],
     }
   }
 
   file { $rsyslog::params::config_file:
-    ensure => present,
-    owner => $rsyslog::params::default_owner,
-    group => $rsyslog::params::default_group,
-    mode => '0444',
+    ensure  => present,
+    owner   => $rsyslog::params::default_owner,
+    group   => $rsyslog::params::default_group,
+    mode    => '0444',
     content => template("rsyslog/rsyslog.conf.erb"),
   }
 
   # note: all unmanaged config snippets will be discarded.
   file { $rsyslog::params::config_dir:
-    ensure => 'directory',
-    owner => $rsyslog::params::default_owner,
-    group => $rsyslog::params::default_group,
-    mode => '0755',
+    ensure  => 'directory',
+    owner   => $rsyslog::params::default_owner,
+    group   => $rsyslog::params::default_group,
+    mode    => '0755',
     recurse => true,
-    purge => true,
-    force => true,
+    purge   => true,
+    force   => true,
   }
 
   if $default_config {
