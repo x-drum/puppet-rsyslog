@@ -35,12 +35,12 @@ define rsyslog::snippet (
   }
 
   file { "$rsyslog::params::config_dir/${name}.conf":
-    ensure => present,
-    owner => $rsyslog::params::default_owner,
-    group => $rsyslog::params::default_group,
-    mode => '0444',
+    ensure  => present,
+    owner   => $rsyslog::params::default_owner,
+    group   => $rsyslog::params::default_group,
+    mode    => '0444',
     content => template("rsyslog/snippet.conf.erb"),
-    notify => Service[$rsyslog::params::service_name],
+    notify  => Service[$rsyslog::params::service_name],
     require => File[$rsyslog::params::config_dir],
   }
 }
