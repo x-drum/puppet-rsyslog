@@ -1,9 +1,9 @@
-# == Class: rsyslog::snippet
+# Define:  rsyslog::snippet
 #
 # A resource for managing rsyslog client stanzas
 #
 # Parameters:
-#  [*lines*]
+#  lines
 #    An array containing stanza's lines.
 #
 # Sample Usage:
@@ -12,16 +12,11 @@
 #  }
 #
 #  will produce the file:
-#  # HEADER: Warning: This file is managed by puppet,
-#  # HEADER: *do not* edit manually.
+#
 #  :programname, isequal, "puppet-agent" /var/log/puppet/puppet.log
 #  & ~
 #
-# === Authors
-#
 # Alessio Cassibba (X-Drum) <swapon@gmail.com>
-#
-# === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
@@ -44,4 +39,3 @@ define rsyslog::snippet (
     require => File[$rsyslog::params::config_dir],
   }
 }
-
