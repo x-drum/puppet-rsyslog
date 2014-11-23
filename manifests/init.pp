@@ -1,26 +1,23 @@
-# == Class: rsyslog
+# Class: rsyslog
 #
 # A class for managing rsyslog server options
 #
 # Parameters:
-# [*package_ensure*]
+# package_ensure
 #    Ensure package installation [present, absent, purged, held, latest], default: present.
 #
-# [*default_config*]
+# default_config
 #    Install a stanza with default configuration [true, false], default: false.
 #
 # Sample Usage:
+#
 # include 'rsyslog'
-# class { 'rsyslog': 
+# class { 'rsyslog':
 #   package_ensure => absent,
 #   default_config => true,
 # }
 #
-# === Authors
-#
 # Alessio Cassibba (X-Drum) <swapon@gmail.com>
-#
-# === Copyright
 #
 # Copyright 2014 Alessio Cassibba (X-Drum), unless otherwise noted.
 #
@@ -42,14 +39,24 @@ class rsyslog (
     require    => [Package[$rsyslog::params::package_name], File[$rsyslog::params::config_file]],
   }
 
-  if $::osfamily == 'openbsd' and ! defined(File["/etc/rc.d/${rsyslog::params::service_name}"]) {
-    file { "/etc/rc.d/${rsyslog::params::service_name}":
-      ensure  => present,
-      owner   => $rsyslog::params::default_owner,
-      group   => $rsyslog::params::default_group,
-      mode    => '0744',
-      source  => 'puppet:///modules/rsyslog/rsyslogd.rc',
-      require => Package[$rsyslog::params::package_name],
+  case $::osfamily {
+    OpenBSD: {
+      if ! defined(File["/etc/rc.d/${rsyslog::params::service_name}"]) {
+        file { "/etc/rc.d/${rsyslog::params::service_name}":
+          ensure  => present,
+          owner   => $rsyslog::params::default_owner,
+          group   => $rsyslog::params::default_group,
+          mode    => '0744',
+          source  => 'puppet:///modules/rsyslog/rsyslogd.rc',
+          require => Package[$rsyslog::params::package_name],
+        }
+      }
+    }
+    FreeBSD: {
+      service { "syslogd":
+        ensure => "stopped",
+        enable => "false",
+      }
     }
   }
 
